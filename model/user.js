@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   }],
   tier:[{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'tier'
+    ref: 'Tier'
   }]
 }, {
   timestamps: true
