@@ -8,22 +8,22 @@ const tierSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  startPrice: {
+  price: {
     type: Number,
     required: true,
     min: 0
   },
-  endPrice: {
-    type: Number,
-    required: true,
-    min: 0,
-    validate: {
-      validator: function(value) {
-        return value >= this.startPrice;
-      },
-      message: 'End price must be greater than or equal to start price.'
-    }
-  },
+  // endPrice: {
+  //   type: Number,
+  //   required: true,
+  //   min: 0,
+  //   validate: {
+  //     validator: function(value) {
+  //       return value >= this.startPrice;
+  //     },
+  //     message: 'End price must be greater than or equal to start price.'
+  //   }
+  // },
   startDate: {
     type: Date,
     required: true

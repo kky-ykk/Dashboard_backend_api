@@ -46,12 +46,12 @@ tierRoutes.post("/", jwtAuthMiddleware, async (req, res) => {
     const user = await User.findOne({ email: req.user.email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { name, startPrice, endPrice, startDate, endDate } = req.body;
+    const { name, price, startDate, endDate } = req.body;
 
     const tier = await Tier.create({
       name,
-      startPrice,
-      endPrice,
+      price,
+      // endPrice,
       startDate,
       endDate,
       user: user._id,
