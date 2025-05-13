@@ -60,9 +60,9 @@ blogRoutes.put("/:id", jwtAuthMiddleware, upload.single("image"), async (req, re
             description: req.body.description,
         };
 
-        // if (req.file) {
-        //     updateData.image = req.file.path;
-        // }
+        if (req.file) {
+            updateData.image = req.file.path;
+        }
 
         const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!updatedBlog) return res.status(404).json({ message: "Blog not found" });
@@ -73,4 +73,42 @@ blogRoutes.put("/:id", jwtAuthMiddleware, upload.single("image"), async (req, re
     }
 });
 
-export default blogRoutes;
+blogRoutes.delete("/:id",jwtAuthMiddleware,async (req,res)=>{
+    try {
+        
+        let ress=await User.findOne({email:req.user.email});
+        const blogsId=ress.blogs;
+    
+        if(!blogsId.includes(req.params.id)) return res.status(404).json({message:"id not found!"});
+    
+        let resd=await Blog.findByIdAndDelete(req.params.id);
+    
+    
+        return res.status(200).json({message:"user deleted successfully",resd});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err.message });
+
+    }
+
+})
+
+export default blogRoutes;blogRoutes.delete("/:id",jwtAuthMiddleware,async (req,res)=>{
+    try {
+        
+        let ress=await User.findOne({email:req.user.email});
+        const blogsId=ress.blogs;
+    
+        if(!blogsId.includes(req.params.id)) return res.status(404).json({message:"id not found!"});
+    
+        let resd=Blog.findByIdAndDelete(req.params.id);
+    
+    
+        return res.status(200).json({message:"user deleted successfully",resd});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err.message });
+
+    }
+
+})
