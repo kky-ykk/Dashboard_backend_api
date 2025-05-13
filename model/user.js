@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
   blogs: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Blog'  // Referencing the Blog model
+  }],
+  tier:[{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'tier'
   }]
 }, {
   timestamps: true

@@ -4,6 +4,7 @@ import router from "./routes/userRoute.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import cors from "cors";
 import referRoutes from "./routes/referRoutes.js";
+import tierRoutes from "./routes/tierRoutes.js";
 
 connectDB();
 
@@ -19,7 +20,7 @@ app.get("/", (req, res) => {
 app.use("/user", router);
 app.use("/blogs", blogRoutes);
 
-// app.use("/tiers", tierRoutes);
+app.use("/tiers", tierRoutes);
 app.use("/refer", referRoutes);
 
 

@@ -24,9 +24,20 @@ const storage = multer.diskStorage({
     },
 });
 const upload = multer({ storage });
-upload
 
-// Create blog (with image)
+// Get all blogs of current user
+blogRoutes.get("/", jwtAuthMiddleware, async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.user.email }).populate("blogs");
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.status(200).json(user.blogs);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+//Create blog (with image)
 blogRoutes.post("/", jwtAuthMiddleware, upload.single("image"), async (req, res) => {
     try {
         const user = await User.findOne({ email: req.user.email });
@@ -73,42 +84,24 @@ blogRoutes.put("/:id", jwtAuthMiddleware, upload.single("image"), async (req, re
     }
 });
 
-blogRoutes.delete("/:id",jwtAuthMiddleware,async (req,res)=>{
+// Delete blog
+blogRoutes.delete("/:id", jwtAuthMiddleware, async (req, res) => {
     try {
-        
-        let ress=await User.findOne({email:req.user.email});
-        const blogsId=ress.blogs;
-    
-        if(!blogsId.includes(req.params.id)) return res.status(404).json({message:"id not found!"});
-    
-        let resd=await Blog.findByIdAndDelete(req.params.id);
-    
-    
-        return res.status(200).json({message:"user deleted successfully",resd});
+        const user = await User.findOne({ email: req.user.email });
+        const blogsId = user.blogs;
+
+        if (!blogsId.includes(req.params.id)) {
+            return res.status(404).json({ message: "Blog ID not found in user's blogs" });
+        }
+
+        const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+        user.blogs = user.blogs.filter(id => id.toString() !== req.params.id);
+        await user.save();
+
+        res.status(200).json({ message: "Blog deleted successfully", deletedBlog });
     } catch (err) {
-        console.log(err);
         res.status(500).json({ error: err.message });
-
     }
+});
 
-})
-
-export default blogRoutes;blogRoutes.delete("/:id",jwtAuthMiddleware,async (req,res)=>{
-    try {
-        
-        let ress=await User.findOne({email:req.user.email});
-        const blogsId=ress.blogs;
-    
-        if(!blogsId.includes(req.params.id)) return res.status(404).json({message:"id not found!"});
-    
-        let resd=Blog.findByIdAndDelete(req.params.id);
-    
-    
-        return res.status(200).json({message:"user deleted successfully",resd});
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: err.message });
-
-    }
-
-})
+export default blogRoutes;
