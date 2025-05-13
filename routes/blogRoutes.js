@@ -127,7 +127,7 @@ blogRoutes.get("/:id", jwtAuthMiddleware, async (req, res) => {
 
         const blog = await Blog.findById(req.params.id);
         
-        res.status(200).json({ message: "Blog deleted successfully", blog });
+        res.status(200).json({ message: "blog by id", blog });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
