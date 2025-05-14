@@ -13,6 +13,8 @@ app.use(express.json());
 
 app.use(cors());
 
+// app.use('/images',express.static('images'));
+
 app.get("/", (req, res) => {
     res.status(200).json({ message: "Checked" });
 });
@@ -27,3 +29,4 @@ app.use("/refer", referRoutes);
 app.listen(3000, () => {
     console.log("Listening on port 3000");
 });
+

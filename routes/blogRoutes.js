@@ -94,15 +94,14 @@ blogRoutes.delete("/:id", jwtAuthMiddleware, async (req, res) => {
             return res.status(404).json({ message: "Blog ID not found in user's blogs" });
         }
 
-        // const blog=await Blog.findById(req.params.id);
-
-        // fs.unlink(blog?.image,
-        //     (err => {
-        //         if (err) console.log(err);
-        //         else {
-        //             console.log(`\nDeleted file: ${blog.image}`);
-        //         }
-        // }));
+        const blog=await Blog.findById(req.params.id);
+        fs.unlink(blog?.image,
+            (err => {
+                if (err) console.log(err);
+                else {
+                    console.log(`\nDeleted file: ${blog.image}`);
+                }
+        }));
 
         const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
         user.blogs = user.blogs.filter(id => id.toString() !== req.params.id);
